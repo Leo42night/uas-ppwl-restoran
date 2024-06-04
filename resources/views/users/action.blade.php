@@ -4,7 +4,7 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
-    $('#delete').on('click', function(e) {
+    $('button#delete').on('click', function(e) {
         e.preventDefault();
         var href = $(this).attr('href');
         Swal.fire({

@@ -53,10 +53,14 @@ class UserController extends Controller
         $user = User::create($input);
 
         if ($request->hasFile('gambar')) {
-            $file = $request->file('gambar');
-            $uploadFile = $file->hashName();
-            $file->move('upload/user/', $uploadFile);
-            $user->gambar = $uploadFile;
+
+            if (File::exists($user->gambar)) {
+                File::delete($user->gambar);
+            }
+
+            $fileName = time().$request->file('gambar')->getClientOriginalName();
+            $path = $request->file('gambar')->storeAs('menus', $fileName, 'public');
+            $user->image = 'storage/' . $path;
         }
 
         $user->assignRole($request->roles);

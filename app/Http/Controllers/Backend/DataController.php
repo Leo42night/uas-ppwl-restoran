@@ -12,26 +12,6 @@ use Illuminate\Support\Facades\File;
 
 class DataController extends Controller
 {
-    public function centrepoint()
-    {
-        $centerpoint = CenterPoint::latest()->get();
-        return datatables()->of($centerpoint)
-        ->addColumn('action','backend.CentrePoint.action')
-        ->addIndexColumn()
-        ->rawColumns(['action'])
-        ->toJson();
-    }
-
-    public function spot()
-    {
-        $spot = Spot::latest()->get();
-        return datatables()->of($spot)
-        ->addColumn('action','backend.Spot.action')
-        ->addIndexColumn()
-        ->rawColumns(['action'])
-        ->toJson();
-    }
-
     public function menu() {
         $menu = Menu::latest()->get();
         return datatables()->of($menu)
@@ -49,7 +29,6 @@ class DataController extends Controller
             $users[$i]['role'] = $user->getRoleNames();
             $i++;
         }
-        // dd($users);
         return datatables()->of($users)
         ->addColumn('action','users.action')
         ->addIndexColumn()

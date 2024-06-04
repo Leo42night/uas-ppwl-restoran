@@ -46,11 +46,15 @@ class MenuController extends Controller
 
         $menu = new Menu;
         if ($request->hasFile('gambar')) {
-            $file = $request->file('gambar');
-            $uploadFile = $file->hashName();
-            $file->move('upload/menu/', $uploadFile);
-            $menu->gambar = $uploadFile;
-        }
+
+            if (File::exists($menu->gambar)) {
+                File::delete($menu->gambar);
+            }
+
+            $fileName = time().$request->file('gambar')->getClientOriginalName();
+            $path = $request->file('gambar')->storeAs('menus', $fileName, 'public');
+            $menu->image = 'storage/' . $path;
+        }  
 
         $menu->nama = $request->input('nama');
         $menu->harga = $request->input('harga');
@@ -92,9 +96,7 @@ class MenuController extends Controller
         ]);
 
         if ($request->hasFile('gambar')) {
-            /**
-             * Hapus file image pada folder public/upload/spots
-             */
+
             if (File::exists($menu->gambar)) {
                 File::delete($menu->gambar);
             }
@@ -102,18 +104,12 @@ class MenuController extends Controller
             $fileName = time().$request->file('gambar')->getClientOriginalName();
             $path = $request->file('gambar')->storeAs('menus', $fileName, 'public');
             $menu->gambar = 'storage/' . $path;
-
-            // $file = $request->file('gambar');
-            // $uploadFile = $file->hashName();
-            // $file->move('upload/spots/', $uploadFile);
-            // $menu->menu = $uploadFile;
         }
 
         $menu->nama = $request->input('nama');
         $menu->harga = $request->input('harga');
-        $menu->update();
 
-        if ($menu) {
+        if ($menu->update()) {
             return to_route('menu.index')->with('success','Data berhasil diupdate');
         } else {
             return to_route('menu.index')->with('error','Data gagal diupdate');

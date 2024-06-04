@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.app-volt')
 
 @section('content')
 <div class="container">
